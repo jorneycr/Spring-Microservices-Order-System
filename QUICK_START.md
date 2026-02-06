@@ -1,61 +1,61 @@
 # Quick Start Guide - Spring Microservices Order System
 
-## 📋 Resumen del Proyecto
+## 📋 Project Overview
 
-Este proyecto implementa un sistema de microservicios con Spring Boot y arquitectura hexagonal completa.
+This project implements a microservices system with Spring Boot and complete hexagonal architecture.
 
-### ✅ Componentes Completados
+### ✅ Completed Components
 
-1. **Infraestructura**
-   - ✅ Service Discovery (Eureka Server) - Puerto 8761
-   - ✅ Config Server - Puerto 8888
-   - ✅ API Gateway con Circuit Breaker - Puerto 8080
-   - ✅ Common Module (excepciones y DTOs compartidos)
+1. **Infrastructure**
+   - ✅ Service Discovery (Eureka Server) - Port 8761
+   - ✅ Config Server - Port 8888
+   - ✅ API Gateway with Circuit Breaker - Port 8080
+   - ✅ Common Module (shared exceptions and DTOs)
 
-2. **User Service** (COMPLETO)
-   - ✅ Arquitectura hexagonal completa
+2. **User Service** (COMPLETE)
+   - ✅ Complete hexagonal architecture
    - ✅ Domain: User, Email (Value Object), Address (Value Object)
-   - ✅ Application: UserService, puertos de entrada/salida
+   - ✅ Application: UserService, input/output ports
    - ✅ Infrastructure: REST Controller, JPA Repository, RabbitMQ Publisher
-   - ✅ Puerto 8081
+   - ✅ Port 8081
 
-### 🔨 Próximos Pasos
+### 🔨 Next Steps
 
-Para completar el proyecto, necesitas crear:
+To complete the project, you need to create:
 
-1. **Product Service** (Puerto 8082)
-   - Seguir el mismo patrón que User Service
-   - Entidades: Product, Price (Value Object), Category
-   - Funcionalidades: CRUD de productos, gestión de inventario
+1. **Product Service** (Port 8082)
+   - Follow the same pattern as User Service
+   - Entities: Product, Price (Value Object), Category
+   - Features: Product CRUD, inventory management
 
-2. **Order Service** (Puerto 8083)
-   - Seguir el mismo patrón que User Service
-   - Entidades: Order, OrderItem, OrderStatus
-   - Funcionalidades: Crear pedidos, consultar pedidos, actualizar estado
+2. **Order Service** (Port 8083)
+   - Follow the same pattern as User Service
+   - Entities: Order, OrderItem, OrderStatus
+   - Features: Create orders, query orders, update status
 
-## 🚀 Cómo Ejecutar
+## 🚀 How to Run
 
-### Opción 1: Desarrollo Local (Sin Docker)
+### Option 1: Local Development (Without Docker)
 
 ```powershell
-# 1. Iniciar Oracle DB y RabbitMQ con Docker
+# 1. Start Oracle DB and RabbitMQ with Docker
 cd c:\Users\Jorney\Desktop\My MVP for incomes\spring-microservices-order-system
 docker-compose up -d oracle-db rabbitmq
 
-# 2. Compilar todo el proyecto
+# 2. Build the entire project
 mvn clean install
 
-# 3. Iniciar servicios en orden (abrir terminales separadas)
+# 3. Start services in order (open separate terminals)
 
 # Terminal 1 - Service Discovery
 cd service-discovery
 mvn spring-boot:run
 
-# Terminal 2 - Config Server (esperar que Eureka esté listo)
+# Terminal 2 - Config Server (wait for Eureka to be ready)
 cd config-server
 mvn spring-boot:run
 
-# Terminal 3 - User Service (esperar que Config Server esté listo)
+# Terminal 3 - User Service (wait for Config Server to be ready)
 cd user-service
 mvn spring-boot:run
 
@@ -64,17 +64,17 @@ cd api-gateway
 mvn spring-boot:run
 ```
 
-### Opción 2: Todo con Docker
+### Option 2: Everything with Docker
 
 ```powershell
-# Compilar todos los servicios
+# Build all services
 mvn clean package -DskipTests
 
-# Iniciar todo con Docker Compose
+# Start everything with Docker Compose
 docker-compose up -d
 ```
 
-## 🔗 URLs Importantes
+## 🔗 Important URLs
 
 - **Eureka Dashboard**: http://localhost:8761
 - **API Gateway**: http://localhost:8080
@@ -82,124 +82,124 @@ docker-compose up -d
 - **User Service Swagger**: http://localhost:8080/api/users/swagger-ui.html
 - **User Service Direct**: http://localhost:8081/swagger-ui.html
 
-## 📝 Ejemplos de API
+## 📝 API Examples
 
-### Crear Usuario
+### Create User
 
 ```bash
 curl -X POST http://localhost:8080/api/users \
   -H "Content-Type: application/json" \
   -d '{
-    "firstName": "Juan",
-    "lastName": "Pérez",
-    "email": "juan.perez@example.com",
-    "phone": "+52-555-1234",
-    "street": "Av. Reforma 123",
-    "city": "Ciudad de México",
-    "state": "CDMX",
-    "zipCode": "06600",
-    "country": "México"
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john.doe@example.com",
+    "phone": "+1-555-1234",
+    "street": "123 Main St",
+    "city": "New York",
+    "state": "NY",
+    "zipCode": "10001",
+    "country": "USA"
   }'
 ```
 
-### Obtener Todos los Usuarios
+### Get All Users
 
 ```bash
 curl http://localhost:8080/api/users
 ```
 
-### Obtener Usuario por ID
+### Get User by ID
 
 ```bash
 curl http://localhost:8080/api/users/{uuid}
 ```
 
-### Obtener Usuario por Email
+### Get User by Email
 
 ```bash
-curl http://localhost:8080/api/users/email/juan.perez@example.com
+curl http://localhost:8080/api/users/email/john.doe@example.com
 ```
 
-## 🏗️ Arquitectura Hexagonal
+## 🏗️ Hexagonal Architecture
 
-Cada microservicio sigue esta estructura:
+Each microservice follows this structure:
 
 ```
 service/
-├── domain/                    # Capa de Dominio (Lógica de Negocio)
-│   ├── model/                # Entidades y Value Objects
-│   ├── service/              # Servicios de Dominio
-│   └── event/                # Eventos de Dominio
-├── application/              # Capa de Aplicación (Casos de Uso)
+├── domain/                    # Domain Layer (Business Logic)
+│   ├── model/                # Entities and Value Objects
+│   ├── service/              # Domain Services
+│   └── event/                # Domain Events
+├── application/              # Application Layer (Use Cases)
 │   ├── port/
-│   │   ├── in/              # Puertos de Entrada (Interfaces)
-│   │   └── out/             # Puertos de Salida (Interfaces)
-│   └── service/             # Implementación de Casos de Uso
-└── infrastructure/          # Capa de Infraestructura (Adaptadores)
+│   │   ├── in/              # Input Ports (Interfaces)
+│   │   └── out/             # Output Ports (Interfaces)
+│   └── service/             # Use Case Implementation
+└── infrastructure/          # Infrastructure Layer (Adapters)
     ├── adapter/
     │   ├── in/
-    │   │   └── rest/        # Adaptador REST (Controllers)
+    │   │   └── rest/        # REST Adapter (Controllers)
     │   └── out/
-    │       ├── persistence/ # Adaptador de Persistencia (JPA)
-    │       └── messaging/   # Adaptador de Mensajería (RabbitMQ)
-    ├── config/              # Configuración de Spring
-    └── exception/           # Manejo de Excepciones
+    │       ├── persistence/ # Persistence Adapter (JPA)
+    │       └── messaging/   # Messaging Adapter (RabbitMQ)
+    ├── config/              # Spring Configuration
+    └── exception/           # Exception Handling
 ```
 
-## 🎯 Ventajas de esta Arquitectura
+## 🎯 Architecture Advantages
 
-1. **Separación de Responsabilidades**: Cada capa tiene una responsabilidad clara
-2. **Independencia de Frameworks**: El dominio no depende de Spring, JPA, etc.
-3. **Testeable**: Fácil crear tests unitarios del dominio
-4. **Mantenible**: Cambios en infraestructura no afectan el dominio
-5. **Escalable**: Fácil agregar nuevos adaptadores (GraphQL, gRPC, etc.)
+1. **Separation of Concerns**: Each layer has a clear responsibility
+2. **Framework Independence**: Domain doesn't depend on Spring, JPA, etc.
+3. **Testable**: Easy to create unit tests for the domain
+4. **Maintainable**: Infrastructure changes don't affect the domain
+5. **Scalable**: Easy to add new adapters (GraphQL, gRPC, etc.)
 
 ## 🔧 Troubleshooting
 
-### Oracle DB no inicia
+### Oracle DB won't start
 ```powershell
 docker-compose logs oracle-db
 docker-compose restart oracle-db
 ```
 
-### Puerto ocupado
+### Port already in use
 ```powershell
-# Ver qué proceso usa el puerto
+# Check which process is using the port
 netstat -ano | findstr :8080
 
-# Cambiar puerto en application.yml o detener el proceso
+# Change port in application.yml or stop the process
 ```
 
-### Servicios no se registran en Eureka
-- Verificar que Eureka esté corriendo: http://localhost:8761
-- Revisar logs del servicio
-- Verificar configuración de `eureka.client.serviceUrl.defaultZone`
+### Services don't register in Eureka
+- Verify Eureka is running: http://localhost:8761
+- Check service logs
+- Verify `eureka.client.serviceUrl.defaultZone` configuration
 
-## 📚 Recursos Adicionales
+## 📚 Additional Resources
 
 - [Spring Boot Documentation](https://spring.io/projects/spring-boot)
 - [Spring Cloud Documentation](https://spring.io/projects/spring-cloud)
 - [Hexagonal Architecture](https://alistair.cockburn.us/hexagonal-architecture/)
 - [Domain-Driven Design](https://martinfowler.com/bliki/DomainDrivenDesign.html)
 
-## 🎓 Conceptos Clave
+## 🎓 Key Concepts
 
-### Arquitectura Hexagonal (Puertos y Adaptadores)
+### Hexagonal Architecture (Ports and Adapters)
 
-- **Puertos de Entrada**: Interfaces que definen cómo el mundo exterior usa nuestra aplicación
-- **Puertos de Salida**: Interfaces que definen cómo nuestra aplicación usa servicios externos
-- **Adaptadores de Entrada**: Implementaciones que conectan el mundo exterior (REST, GraphQL, etc.)
-- **Adaptadores de Salida**: Implementaciones que conectan a servicios externos (DB, APIs, etc.)
+- **Input Ports**: Interfaces that define how the outside world uses our application
+- **Output Ports**: Interfaces that define how our application uses external services
+- **Input Adapters**: Implementations that connect the outside world (REST, GraphQL, etc.)
+- **Output Adapters**: Implementations that connect to external services (DB, APIs, etc.)
 
 ### Value Objects
 
-Objetos inmutables que representan conceptos del dominio:
-- `Email`: Valida formato de email
-- `Address`: Representa una dirección completa
-- `Price`: Representa un precio con validación
+Immutable objects that represent domain concepts:
+- `Email`: Validates email format
+- `Address`: Represents a complete address
+- `Price`: Represents a price with validation
 
 ### Domain Events
 
-Eventos que representan algo que sucedió en el dominio:
-- `UserCreatedEvent`: Se publica cuando se crea un usuario
-- Permite comunicación asíncrona entre microservicios
+Events that represent something that happened in the domain:
+- `UserCreatedEvent`: Published when a user is created
+- Enables asynchronous communication between microservices

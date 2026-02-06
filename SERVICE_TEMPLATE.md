@@ -1,10 +1,10 @@
-# Plantilla para Crear Nuevos Microservicios
+# Template for Creating New Microservices
 
-Esta guía te ayudará a crear Product Service y Order Service siguiendo el patrón de User Service.
+This guide will help you create Product Service and Order Service following the User Service pattern.
 
-## Pasos para Crear un Nuevo Microservicio
+## Steps to Create a New Microservice
 
-### 1. Crear estructura del módulo
+### 1. Create module structure
 
 ```
 new-service/
@@ -61,7 +61,7 @@ new-service/
             └── application.yml
 ```
 
-### 2. Product Service - Modelo de Dominio Sugerido
+### 2. Product Service - Suggested Domain Model
 
 ```java
 // Product.java
@@ -101,7 +101,7 @@ public enum Category {
 }
 ```
 
-### 3. Order Service - Modelo de Dominio Sugerido
+### 3. Order Service - Suggested Domain Model
 
 ```java
 // Order.java
@@ -151,14 +151,14 @@ public enum OrderStatus {
 }
 ```
 
-### 4. Configuración de Puertos
+### 4. Port Configuration
 
 - **Product Service**: 8082
 - **Order Service**: 8083
 
-### 5. Configuración de RabbitMQ
+### 5. RabbitMQ Configuration
 
-Cada servicio debe tener su propio exchange y queues:
+Each service should have its own exchange and queues:
 
 **Product Service:**
 ```yaml
@@ -186,9 +186,9 @@ rabbitmq:
     order-updated: order.updated
 ```
 
-### 6. Actualizar API Gateway
+### 6. Update API Gateway
 
-Agregar rutas en `api-gateway/src/main/resources/application.yml`:
+Add routes in `api-gateway/src/main/resources/application.yml`:
 
 ```yaml
 spring:
@@ -207,9 +207,9 @@ spring:
                 fallbackUri: forward:/fallback/products
 ```
 
-### 7. Actualizar Parent POM
+### 7. Update Parent POM
 
-Agregar módulos en `pom.xml`:
+Add modules in `pom.xml`:
 
 ```xml
 <modules>
@@ -223,12 +223,12 @@ Agregar módulos en `pom.xml`:
 </modules>
 ```
 
-### 8. Comunicación entre Microservicios
+### 8. Communication Between Microservices
 
-**Order Service necesita comunicarse con User Service y Product Service:**
+**Order Service needs to communicate with User Service and Product Service:**
 
 ```java
-// En Order Service - crear un cliente Feign
+// In Order Service - create a Feign client
 @FeignClient(name = "user-service")
 public interface UserServiceClient {
     @GetMapping("/users/{id}")
@@ -242,7 +242,7 @@ public interface ProductServiceClient {
 }
 ```
 
-Agregar dependencia en `order-service/pom.xml`:
+Add dependency in `order-service/pom.xml`:
 
 ```xml
 <dependency>
@@ -251,7 +251,7 @@ Agregar dependencia en `order-service/pom.xml`:
 </dependency>
 ```
 
-Y habilitar Feign en la aplicación:
+And enable Feign in the application:
 
 ```java
 @SpringBootApplication
@@ -262,50 +262,50 @@ public class OrderServiceApplication {
 }
 ```
 
-## Checklist para Nuevo Microservicio
+## Checklist for New Microservice
 
-- [ ] Crear estructura de carpetas
-- [ ] Configurar pom.xml con dependencias
-- [ ] Crear entidades de dominio
-- [ ] Crear value objects
-- [ ] Definir puertos de entrada (use cases)
-- [ ] Definir puertos de salida (repositories, publishers)
-- [ ] Implementar servicios de aplicación
-- [ ] Crear REST controller
-- [ ] Crear DTOs de request/response
-- [ ] Crear mappers (MapStruct)
-- [ ] Crear JPA entities
-- [ ] Crear JPA repository
-- [ ] Crear repository adapter
-- [ ] Crear event publisher
-- [ ] Configurar RabbitMQ
-- [ ] Configurar OpenAPI/Swagger
-- [ ] Crear global exception handler
-- [ ] Configurar application.yml
-- [ ] Crear Dockerfile
-- [ ] Actualizar docker-compose.yml
-- [ ] Actualizar API Gateway routes
-- [ ] Escribir tests unitarios
-- [ ] Escribir tests de integración
+- [ ] Create folder structure
+- [ ] Configure pom.xml with dependencies
+- [ ] Create domain entities
+- [ ] Create value objects
+- [ ] Define input ports (use cases)
+- [ ] Define output ports (repositories, publishers)
+- [ ] Implement application services
+- [ ] Create REST controller
+- [ ] Create request/response DTOs
+- [ ] Create mappers (MapStruct)
+- [ ] Create JPA entities
+- [ ] Create JPA repository
+- [ ] Create repository adapter
+- [ ] Create event publisher
+- [ ] Configure RabbitMQ
+- [ ] Configure OpenAPI/Swagger
+- [ ] Create global exception handler
+- [ ] Configure application.yml
+- [ ] Create Dockerfile
+- [ ] Update docker-compose.yml
+- [ ] Update API Gateway routes
+- [ ] Write unit tests
+- [ ] Write integration tests
 
-## Tips Importantes
+## Important Tips
 
-1. **Siempre empieza por el dominio**: Define primero tus entidades y value objects
-2. **Mantén el dominio puro**: No uses anotaciones de Spring/JPA en el dominio
-3. **Usa Value Objects**: Para conceptos que no tienen identidad (Email, Price, Address)
-4. **Valida en el dominio**: La lógica de validación va en las entidades y value objects
-5. **Puertos antes que adaptadores**: Define las interfaces antes de implementarlas
-6. **Un adaptador por tecnología**: Separa REST, JPA, RabbitMQ en adaptadores distintos
-7. **Mappers para conversión**: Usa MapStruct para convertir entre capas
-8. **Tests del dominio primero**: El dominio debe ser fácil de testear sin Spring
+1. **Always start with the domain**: Define your entities and value objects first
+2. **Keep the domain pure**: Don't use Spring/JPA annotations in the domain
+3. **Use Value Objects**: For concepts that don't have identity (Email, Price, Address)
+4. **Validate in the domain**: Validation logic goes in entities and value objects
+5. **Ports before adapters**: Define interfaces before implementing them
+6. **One adapter per technology**: Separate REST, JPA, RabbitMQ into different adapters
+7. **Mappers for conversion**: Use MapStruct to convert between layers
+8. **Domain tests first**: The domain should be easy to test without Spring
 
-## Ejemplo Completo: Crear Product Service
+## Complete Example: Create Product Service
 
-Puedes copiar toda la estructura de `user-service` y reemplazar:
+You can copy the entire structure from `user-service` and replace:
 - `user` → `product`
 - `User` → `Product`
 - `Email` → `Price`
 - `Address` → `Category`
-- Puerto `8081` → `8082`
+- Port `8081` → `8082`
 
-Luego ajusta la lógica de negocio según las necesidades de productos.
+Then adjust the business logic according to product needs.
