@@ -1,40 +1,40 @@
 # Spring Microservices Order System
 
-Sistema de gestión de pedidos construido con Spring Boot, microservicios y arquitectura hexagonal.
+Order management system built with Spring Boot, microservices, and hexagonal architecture.
 
-## 🏗️ Arquitectura
+## 🏗️ Architecture
 
-Este proyecto implementa una arquitectura de microservicios con los siguientes componentes:
+This project implements a microservices architecture with the following components:
 
-- **Service Discovery (Eureka)**: Registro y descubrimiento de servicios
-- **API Gateway**: Punto de entrada único para todos los servicios
-- **Config Server**: Configuración centralizada
-- **User Service**: Gestión de usuarios
-- **Product Service**: Gestión de productos
-- **Order Service**: Gestión de pedidos
+- **Service Discovery (Eureka)**: Service registration and discovery
+- **API Gateway**: Single entry point for all services
+- **Config Server**: Centralized configuration
+- **User Service**: User management
+- **Product Service**: Product management
+- **Order Service**: Order management
 
-### Arquitectura Hexagonal
+### Hexagonal Architecture
 
-Cada microservicio sigue el patrón de arquitectura hexagonal (puertos y adaptadores):
+Each microservice follows the hexagonal architecture pattern (ports and adapters):
 
 ```
-├── domain/              # Lógica de negocio pura
-│   ├── model/          # Entidades y Value Objects
-│   ├── service/        # Servicios de dominio
-│   └── event/          # Eventos de dominio
-├── application/        # Casos de uso
+├── domain/              # Pure business logic
+│   ├── model/          # Entities and Value Objects
+│   ├── service/        # Domain services
+│   └── event/          # Domain events
+├── application/        # Use cases
 │   ├── port/
-│   │   ├── in/        # Puertos de entrada (interfaces)
-│   │   └── out/       # Puertos de salida (interfaces)
-│   └── service/       # Implementación de casos de uso
-└── infrastructure/     # Adaptadores
+│   │   ├── in/        # Input ports (interfaces)
+│   │   └── out/       # Output ports (interfaces)
+│   └── service/       # Use case implementation
+└── infrastructure/     # Adapters
     ├── adapter/
-    │   ├── in/        # Adaptadores de entrada (REST, etc.)
-    │   └── out/       # Adaptadores de salida (DB, messaging)
-    └── config/        # Configuración de Spring
+    │   ├── in/        # Input adapters (REST, etc.)
+    │   └── out/       # Output adapters (DB, messaging)
+    └── config/        # Spring configuration
 ```
 
-## 🛠️ Tecnologías
+## 🛠️ Technologies
 
 - **Java 17**
 - **Spring Boot 3.2.2**
@@ -44,66 +44,66 @@ Cada microservicio sigue el patrón de arquitectura hexagonal (puertos y adaptad
 - **Maven**
 - **Docker & Docker Compose**
 
-## 📋 Requisitos Previos
+## 📋 Prerequisites
 
-- Java 17 o superior
+- Java 17 or higher
 - Maven 3.8+
-- Docker y Docker Compose
+- Docker and Docker Compose
 - Git
 
-## 🚀 Inicio Rápido
+## 🚀 Quick Start
 
-### 1. Clonar el repositorio
+### 1. Clone the repository
 
 ```bash
 git clone <repository-url>
 cd spring-microservices-order-system
 ```
 
-### 2. Compilar el proyecto
+### 2. Build the project
 
 ```bash
 mvn clean install
 ```
 
-### 3. Iniciar infraestructura con Docker
+### 3. Start infrastructure with Docker
 
 ```bash
 docker-compose up -d oracle-db rabbitmq
 ```
 
-Espera unos minutos para que Oracle DB esté completamente inicializado.
+Wait a few minutes for Oracle DB to be fully initialized.
 
-### 4. Iniciar servicios
+### 4. Start services
 
-**Opción A: Con Docker Compose (Recomendado)**
+**Option A: With Docker Compose (Recommended)**
 ```bash
 docker-compose up -d
 ```
 
-**Opción B: Manualmente**
+**Option B: Manually**
 ```bash
 # Service Discovery
 cd service-discovery
 mvn spring-boot:run
 
-# Config Server (en otra terminal)
+# Config Server (in another terminal)
 cd config-server
 mvn spring-boot:run
 
-# User Service (en otra terminal)
+# User Service (in another terminal)
 cd user-service
 mvn spring-boot:run
 
-# Product Service (en otra terminal)
+# Product Service (in another terminal)
 cd product-service
 mvn spring-boot:run
 
-# Order Service (en otra terminal)
+# Order Service (in another terminal)
 cd order-service
 mvn spring-boot:run
 
-# API Gateway (en otra terminal)
+# API Gateway (in another terminal)
 cd api-gateway
 mvn spring-boot:run
 ```
@@ -119,7 +119,7 @@ mvn spring-boot:run
 
 ## 📚 API Documentation
 
-Una vez iniciados los servicios, accede a la documentación Swagger:
+Once the services are started, access the Swagger documentation:
 
 - **User Service API**: http://localhost:8080/user-service/swagger-ui.html
 - **Product Service API**: http://localhost:8080/product-service/swagger-ui.html
@@ -127,104 +127,104 @@ Una vez iniciados los servicios, accede a la documentación Swagger:
 
 ## 🧪 Testing
 
-### Ejecutar tests unitarios
+### Run unit tests
 ```bash
 mvn clean test
 ```
 
-### Ejecutar tests de integración
+### Run integration tests
 ```bash
 mvn clean verify
 ```
 
-### Cobertura de código
+### Code coverage
 ```bash
 mvn clean test jacoco:report
 ```
 
-Los reportes se generan en `target/site/jacoco/index.html` de cada módulo.
+Reports are generated in `target/site/jacoco/index.html` for each module.
 
-## 📦 Estructura del Proyecto
+## 📦 Project Structure
 
 ```
 spring-microservices-order-system/
 ├── api-gateway/              # Spring Cloud Gateway
 ├── service-discovery/        # Eureka Server
 ├── config-server/           # Spring Cloud Config
-├── user-service/            # Microservicio de usuarios
-├── product-service/         # Microservicio de productos
-├── order-service/           # Microservicio de pedidos
-├── common/                  # Librerías compartidas
-├── docker-compose.yml       # Configuración Docker
+├── user-service/            # User microservice
+├── product-service/         # Product microservice
+├── order-service/           # Order microservice
+├── common/                  # Shared libraries
+├── docker-compose.yml       # Docker configuration
 ├── pom.xml                  # Parent POM
 └── README.md
 ```
 
-## 🔧 Configuración
+## 🔧 Configuration
 
-### Base de Datos Oracle
+### Oracle Database
 
-Credenciales por defecto:
+Default credentials:
 - **Host**: localhost:1521
 - **SID**: XEPDB1
-- **Usuario**: system
+- **User**: system
 - **Password**: Oracle123
 
 ### RabbitMQ
 
-Credenciales por defecto:
+Default credentials:
 - **Host**: localhost:5672
-- **Usuario**: admin
+- **User**: admin
 - **Password**: admin123
 
-### Control de Versiones
+### Version Control
 
-El proyecto incluye archivos `.gitignore` configurados en:
-- **Raíz del proyecto**: Configuración global para todo el monorepo
-- **Cada microservicio**: Configuración específica para cada módulo
+The project includes `.gitignore` files configured in:
+- **Project root**: Global configuration for the entire monorepo
+- **Each microservice**: Specific configuration for each module
 
-Los archivos `.gitignore` excluyen:
-- Archivos de compilación de Maven (`target/`, `*.class`)
-- Archivos de configuración de IDEs (`.idea/`, `*.iml`, `.vscode/`)
-- Logs y archivos temporales (`*.log`, `*.tmp`, `*.bak`)
-- Archivos de configuración local (`application-local.yml`)
-- Archivos del sistema operativo (`.DS_Store`, `Thumbs.db`)
+The `.gitignore` files exclude:
+- Maven build files (`target/`, `*.class`)
+- IDE configuration files (`.idea/`, `*.iml`, `.vscode/`)
+- Logs and temporary files (`*.log`, `*.tmp`, `*.bak`)
+- Local configuration files (`application-local.yml`)
+- Operating system files (`.DS_Store`, `Thumbs.db`)
 
 ## 🐛 Troubleshooting
 
-### Oracle DB no inicia
+### Oracle DB won't start
 ```bash
 docker-compose logs oracle-db
 docker-compose restart oracle-db
 ```
 
-### Puerto ya en uso
+### Port already in use
 ```bash
-# Ver procesos usando el puerto
+# View processes using the port
 netstat -ano | findstr :8080
 
-# Cambiar el puerto en application.yml o detener el proceso
+# Change the port in application.yml or stop the process
 ```
 
-### Servicios no se registran en Eureka
-- Verificar que Eureka esté corriendo en http://localhost:8761
-- Revisar logs del servicio
-- Verificar configuración de `eureka.client.serviceUrl.defaultZone`
+### Services don't register in Eureka
+- Verify that Eureka is running at http://localhost:8761
+- Check service logs
+- Verify `eureka.client.serviceUrl.defaultZone` configuration
 
-## 📝 Licencia
+## 📝 License
 
-Este proyecto está bajo la licencia MIT.
+This project is licensed under the MIT License.
 
-## 👥 Contribuir
+## 👥 Contributing
 
-Las contribuciones son bienvenidas. Por favor:
+Contributions are welcome. Please:
 
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
+1. Fork the project
+2. Create a branch for your feature (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-## 📧 Contacto
+## 📧 Contact
 
-Para preguntas o sugerencias, por favor abre un issue en el repositorio.
+For questions or suggestions, please open an issue in the repository.
